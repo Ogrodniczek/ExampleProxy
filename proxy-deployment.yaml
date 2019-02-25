@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-nginx
+  labels:
+    app: proxy-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: proxy-nginx
+  template:
+    metadata:
+      labels:
+        app: proxy-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: proxy-nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf  
+      volumes:
+      - name: proxy-nginx-conf
+        configMap:
+          name: proxy-nginx-conf
